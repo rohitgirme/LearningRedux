@@ -1,50 +1,43 @@
+import axios from 'axios';
+
 const ROOT_URL = 'http://reduxblog.herokuapp.com/api/posts';
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 export const POSTS_FETCHED = 'POSTS_FETCHED';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+const API_KEY = '123xyzwasdsasd';
+
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 export function fetchPosts() {
-  let request = fetch(`${ROOT_URL}?key=123asdfsg`, {
-    method: 'GET'
-  });
+  let request = axios.get(`${ROOT_URL}?key=${API_KEY}`);
 
   return (dispatch) => {
     dispatch(requestPosts());
 
-    request.then((response) => {
+    return request.then((response) => {
 
-      if (response.status === 200) {
-
-        response.json().then((data) => {
-          dispatch(postsFetched(data));
-        });
-
-      }
+      dispatch(postsFetched(response));
 
     });
   };
 }
 
 export function addPost(post) {
-  let request = fetch(ROOT_URL, {
-    method: 'POST',
-    body: JSON.stringify(post)
-  });
+  let request = axios.post(`${ROOT_URL}?key=${API_KEY}`, post);
 
   return (dispatch) => {
     // dispatch();
-    request.then((response) => {
-      if (response.status === 200) {
-        dispatch(postAddedSuccess());
-      }
+    return request.then((response) => {
+      dispatch(postAddedSuccess(response));
     });
   }
 }
 
-function postAddedSuccess() {
+function postAddedSuccess(post) {
   return {
-    type: ADD_POST_SUCCESS
+    type: ADD_POST_SUCCESS,
+    payload: [post]
   }
 }
 

@@ -19,5 +19,6 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={PostsListContainer}/>
     <Route path="posts/new" component={AddPostsContainer} />
+    <Route path="posts/:id" component={ShowPostsContainer} />
   </Route>
 );
